@@ -1,4 +1,5 @@
 ﻿using Bookstore.Models;
+using Bookstore.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,27 +12,38 @@ namespace Bookstore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly BookRepository _bookRepository = null;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
+            _bookRepository = new BookRepository();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
+        public ViewResult Index()
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public List<BookModel> GetAllBooks()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return _bookRepository.GetAllBooks();
         }
+
+        public BookModel GetBookById(int bookid)
+        {
+           return _bookRepository.GetBookById(bookid);
+        }
+
+        public List<BookModel> SearchBook(string bookName, string authorName)
+        {
+            return _bookRepository.SearchBook(bookName, authorName);
+        }
+
+
+
+
+
+
+
+
     }
 }
